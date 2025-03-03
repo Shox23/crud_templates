@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import {
   createNewTemplate,
   deleteChosenTemplate,
@@ -18,12 +18,12 @@ const useTemplates = () => {
   const searchIputValue = ref<string>("");
   const filteredTemplates = ref<TemplateType[]>([]);
 
-  const getTemplates = async () => {
+  const getTemplates = async (params?: string) => {
     try {
       isLoading.value = true;
-      const response = await fetchTemplates();
+      const response = await fetchTemplates(params);
       if (response.data) {
-        templates.value.push(...response.data);
+        templates.value = response.data;
       } else {
         errorMessage.value = "Что-то пошло не так";
       }
@@ -103,6 +103,15 @@ const useTemplates = () => {
       }
     }
   };
+
+  let timer;
+
+  watch(searchIputValue, (newValue) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      getTemplates(newValue);
+    }, 500);
+  });
 
   return {
     isLoading,

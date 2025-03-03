@@ -16,6 +16,9 @@
       <div v-else-if="errorMessage && !isLoading">
         <h1>{{ errorMessage }}</h1>
       </div>
+      <div v-else-if="!templates.length && !errorMessage && !isLoading">
+        <h1>По данному запросу нет шаблонов</h1>
+      </div>
     </div>
     <ModalWindow />
   </section>
@@ -38,14 +41,12 @@ const {
   chosenTemplate,
   isLoading,
   errorMessage,
-  isCurrentTemplateEditing,
 } = useTemplates();
 const handleDeleteTemplate = (item: TemplateType) => {
   chosenTemplate.value = item;
   openModal();
 };
 const handleEditTemplate = (id: number) => {
-  isCurrentTemplateEditing.value = true;
   router.push(`/template/${id}`);
 };
 onMounted(() => {

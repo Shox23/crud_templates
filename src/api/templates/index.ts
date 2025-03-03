@@ -1,7 +1,9 @@
 import apiInstance from "../instance";
 
-export const fetchTemplates = async () => {
-  const response = await apiInstance.get("/canvas_templates");
+export const fetchTemplates = async (params?: string) => {
+  const response = await apiInstance.get(
+    `/canvas_templates${params ? `?filter[name]=${params}` : ""}`
+  );
   return response;
 };
 
@@ -11,9 +13,6 @@ export const createNewTemplate = async (data: FormData) => {
 };
 
 export const editTemplate = async (data: FormData, id: number) => {
-  for (var pair of data.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
-  }
   const response = await apiInstance.post(
     `/canvas_templates/${id}?_method=PATCH`,
     data
