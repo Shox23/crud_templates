@@ -10,14 +10,10 @@
           />
         </li>
       </ul>
-      <div v-else-if="isLoading && !errorMessage">
-        <h1>Загрузка...</h1>
-      </div>
-      <div v-else-if="errorMessage && !isLoading">
-        <h1>{{ errorMessage }}</h1>
-      </div>
-      <div v-else-if="!templates.length && !errorMessage && !isLoading">
-        <h1>По данному запросу нет шаблонов</h1>
+      <div v-else>
+        <h1 v-if="isLoading">Загрузка...</h1>
+        <h1 v-else-if="errorMessage">{{ errorMessage }}</h1>
+        <h1 v-else>По данному запросу нет шаблонов</h1>
       </div>
     </div>
     <ModalWindow />

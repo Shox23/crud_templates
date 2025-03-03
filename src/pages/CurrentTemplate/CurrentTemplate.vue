@@ -11,15 +11,15 @@
           Редактировать
         </button>
       </div>
-      <div v-if="currentTemplate && !isLoading">
-        <EditTemplate v-if="isEditing" @cancel-edit="handleCancelEdit" />
-        <ReadTemplate v-else />
-      </div>
-      <div v-else-if="isLoading">
+      <div v-if="isLoading">
         <h1>Загрузка...</h1>
       </div>
       <div v-else-if="errorMessage">
         <h1>{{ errorMessage }}</h1>
+      </div>
+      <div v-else-if="currentTemplate">
+        <EditTemplate v-if="isEditing" @cancel-edit="handleCancelEdit" />
+        <ReadTemplate v-else />
       </div>
     </div>
   </section>

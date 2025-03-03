@@ -17,6 +17,7 @@ const useTemplates = () => {
   const errorMessage = ref<string>("");
   const searchIputValue = ref<string>("");
   const filteredTemplates = ref<TemplateType[]>([]);
+  let debounceTimer: number | null = null;;
 
   const getTemplates = async (params?: string) => {
     try {
@@ -62,12 +63,6 @@ const useTemplates = () => {
     }
   };
 
-  const filterTemplates = (value: string) => {
-    // templates.value = templates.value.filter((item) =>
-    //   item.tags.includes(value)
-    // );
-  };
-
   const getCurrentTemplate = async (id: string) => {
     if (!currentTemplate.value || currentTemplate.value.id.toString() !== id) {
       try {
@@ -104,11 +99,11 @@ const useTemplates = () => {
     }
   };
 
-  let timer;
-
   watch(searchIputValue, (newValue) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
+    if (debounceTimer !== null) {
+      clearTimeout(debounceTimer);
+    };
+    debounceTimer = setTimeout(() => {
       getTemplates(newValue);
     }, 500);
   });
@@ -118,7 +113,6 @@ const useTemplates = () => {
     templates,
     errorMessage,
     getTemplates,
-    filterTemplates,
     createTemplate,
     getCurrentTemplate,
     currentTemplate,

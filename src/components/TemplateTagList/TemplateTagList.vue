@@ -1,5 +1,5 @@
 <template>
-  <ul class="tag-list">
+  <ul class="tag-list" v-if="!disabled">
     <li
       v-for="item in templateTags"
       :key="item"
@@ -9,6 +9,17 @@
         v-if="item"
         :class="`tag-list__item ${activeTags.includes(item) ? 'active' : ''}`"
       >
+        {{ item }}
+      </div>
+    </li>
+  </ul>
+  <ul class="tag-list" v-else>
+    <li
+      v-for="item in activeItems"
+      :key="item"
+      @click="() => handleTagActivate(item)"
+    >
+      <div v-if="item" class="tag-list__item">
         {{ item }}
       </div>
     </li>

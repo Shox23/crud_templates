@@ -35,7 +35,9 @@
       </div>
       <div class="modal__controls">
         <button type="reset" class="modal__controls__btn">Отменить</button>
-        <button type="submit" class="modal__controls__btn">Добавить</button>
+        <button type="submit" class="modal__controls__btn">
+          Редактировать
+        </button>
       </div>
     </form>
   </div>
