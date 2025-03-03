@@ -42,14 +42,14 @@ const useForm = () => {
     Object.assign(templateForm, initialTemplateForm);
   };
 
-  const submitLoginForm = () => {
+  const submitLoginForm = async () => {
     if (
       loginForm.email.trim().length == 0 ||
       loginForm.password.trim().length == 0
     ) {
       alert("fill the inputs");
     } else {
-      login(loginForm);
+      await login(loginForm);
     }
   };
 
