@@ -1,0 +1,126 @@
+import { ref } from "vue";
+import {
+  createNewTemplate,
+  deleteChosenTemplate,
+  editTemplate,
+  fetchCurrentTemplate,
+  fetchTemplates,
+} from "../api/templates";
+import type { TemplateType } from "../types/TemplateType";
+
+const chosenTemplate = ref<TemplateType | null>(null);
+const templates = ref<TemplateType[]>([]);
+const isCurrentTemplateEditing = ref<boolean>(false);
+
+const useTemplates = () => {
+  const isLoading = ref<boolean>(false);
+  const errorMessage = ref<string>("");
+  const searchIputValue = ref<string>("");
+  const filteredTemplates = ref<TemplateType[]>([]);
+  const currentTemplate = ref<TemplateType | null>(null);
+
+  // TODO
+  const getTemplates = async () => {
+    try {
+      isLoading.value = true;
+      const response = await fetchTemplates();
+      if (response.data) {
+        templates.value.push(...response.data);
+      } else {
+        errorMessage.value = "Что-то пошло не так";
+      }
+    } catch (error) {
+      errorMessage.value = "Что-то пошло не так";
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  // TODO
+  const editCurrentTemplate = async (data: FormData, id: number) => {
+    try {
+      const response = await editTemplate(data, id);
+      if (response.data) {
+        currentTemplate.value = response.data;
+      } else {
+        alert("Что-то пошло не так");
+      }
+    } catch (error) {
+      alert("Что-то пошло не так");
+    }
+  };
+
+  // TODO
+  const createTemplate = async (data: FormData) => {
+    try {
+      const response = await createNewTemplate(data);
+      console.log(response);
+      if (response.data) {
+        templates.value.push(response.data);
+      }
+    } catch (error) {
+      alert("Что-то пошло не так");
+    }
+  };
+
+  const filterTemplates = (value: string) => {
+    templates.value = templates.value.filter((item) =>
+      item.tags.includes(value)
+    );
+  };
+
+  const getCurrentTemplate = async (id: string) => {
+    if (!currentTemplate.value || currentTemplate.value.id.toString() !== id) {
+      try {
+        isLoading.value = true;
+        const response = await fetchCurrentTemplate(id);
+        console.log(response);
+        if (response.data) {
+          currentTemplate.value = response.data;
+        } else {
+          currentTemplate.value = null;
+          errorMessage.value = "Что-то пошло не так";
+        }
+      } catch (error) {
+        errorMessage.value = "Что-то пошло не так";
+      } finally {
+        isLoading.value = false;
+      }
+    }
+  };
+
+  const deleteTemplate = async () => {
+    if (chosenTemplate.value !== null) {
+      try {
+        const response = await deleteChosenTemplate(chosenTemplate.value.id);
+        if (response.status == 204) {
+          templates.value = templates.value.filter(
+            (item) => item.id !== chosenTemplate.value?.id
+          );
+          console.log(templates.value);
+        }
+      } catch (error) {
+        errorMessage.value = "Что-то пошло не так";
+      }
+    }
+  };
+
+  return {
+    isLoading,
+    templates,
+    errorMessage,
+    getTemplates,
+    filterTemplates,
+    createTemplate,
+    getCurrentTemplate,
+    currentTemplate,
+    filteredTemplates,
+    searchIputValue,
+    chosenTemplate,
+    deleteTemplate,
+    isCurrentTemplateEditing,
+    editCurrentTemplate,
+  };
+};
+
+export default useTemplates;
