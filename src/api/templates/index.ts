@@ -6,9 +6,6 @@ export const fetchTemplates = async () => {
 };
 
 export const createNewTemplate = async (data: FormData) => {
-  for (var pair of data.entries()) {
-    console.log(pair[0] + ", " + pair[1]);
-  }
   const response = await apiInstance.post("/canvas_templates", data);
   return response;
 };

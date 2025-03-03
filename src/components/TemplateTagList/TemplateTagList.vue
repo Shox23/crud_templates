@@ -18,18 +18,23 @@
 <script lang="ts" setup>
 import { onMounted } from "vue";
 import useTemplateTags from "../../composables/useTemplateTags";
-import useTemplates from "../../composables/useTemplates";
+import type { TemplateTaglistEmits, TemplateTaglistProps } from "./interfaces";
+
+const props = defineProps<TemplateTaglistProps>();
+const emits = defineEmits<TemplateTaglistEmits>();
 const { templateTags, getTemplateTags, chooseActiveTag, activeTags } =
   useTemplateTags();
-const {filterTemplates} = useTemplates()
 
 const handleTagActivate = (value: string) => {
-  chooseActiveTag(value)
-  filterTemplates(value)
-}
+  chooseActiveTag(value);
+  emits("activate", activeTags);
+};
 
 onMounted(() => {
   if (!templateTags.length) getTemplateTags();
+  if (props.activeItems) {
+    activeTags.push(...props.activeItems);
+  }
 });
 </script>
 

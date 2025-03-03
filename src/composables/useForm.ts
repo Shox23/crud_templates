@@ -26,7 +26,7 @@ const useForm = () => {
     description: "",
     height: "",
     width: "",
-    tags: null,
+    tags: [],
     preview_image: "",
   });
   const loginForm = reactive<LoginData>({

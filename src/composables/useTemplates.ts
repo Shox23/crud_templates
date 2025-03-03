@@ -10,16 +10,14 @@ import type { TemplateType } from "../types/TemplateType";
 
 const chosenTemplate = ref<TemplateType | null>(null);
 const templates = ref<TemplateType[]>([]);
-const isCurrentTemplateEditing = ref<boolean>(false);
+const currentTemplate = ref<TemplateType | null>(null);
 
 const useTemplates = () => {
   const isLoading = ref<boolean>(false);
   const errorMessage = ref<string>("");
   const searchIputValue = ref<string>("");
   const filteredTemplates = ref<TemplateType[]>([]);
-  const currentTemplate = ref<TemplateType | null>(null);
 
-  // TODO
   const getTemplates = async () => {
     try {
       isLoading.value = true;
@@ -42,6 +40,8 @@ const useTemplates = () => {
       const response = await editTemplate(data, id);
       if (response.data) {
         currentTemplate.value = response.data;
+        let idx = templates.value.findIndex((item) => item.id == id);
+        templates.value[idx] = response.data;
       } else {
         alert("Что-то пошло не так");
       }
@@ -50,7 +50,6 @@ const useTemplates = () => {
     }
   };
 
-  // TODO
   const createTemplate = async (data: FormData) => {
     try {
       const response = await createNewTemplate(data);
@@ -64,9 +63,9 @@ const useTemplates = () => {
   };
 
   const filterTemplates = (value: string) => {
-    templates.value = templates.value.filter((item) =>
-      item.tags.includes(value)
-    );
+    // templates.value = templates.value.filter((item) =>
+    //   item.tags.includes(value)
+    // );
   };
 
   const getCurrentTemplate = async (id: string) => {
@@ -118,7 +117,6 @@ const useTemplates = () => {
     searchIputValue,
     chosenTemplate,
     deleteTemplate,
-    isCurrentTemplateEditing,
     editCurrentTemplate,
   };
 };

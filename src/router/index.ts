@@ -10,13 +10,13 @@ const routes = [
   {
     name: "Login",
     path: "/login",
-    component: ()=>import('../pages/Login.vue')
+    component: () => import("../pages/Login.vue"),
   },
   {
     name: "Template",
     path: "/template/:id",
-    component: ()=>import('../pages/CurrentTemplate.vue')
-  }
+    component: () => import("../pages/CurrentTemplate/CurrentTemplate.vue"),
+  },
 ];
 
 const router = createRouter({
